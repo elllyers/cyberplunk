@@ -1,66 +1,66 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Loader2, Search, Zap, Database, Globe } from 'lucide-react'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Loader2, Search, Zap, Database, Globe } from "lucide-react";
 
 interface SearchResult {
-  url: string
-  name: string
-  snippet: string
-  host_name: string
-  rank: number
-  date: string
-  favicon: string
+  url: string;
+  name: string;
+  snippet: string;
+  host_name: string;
+  rank: number;
+  date: string;
+  favicon: string;
 }
 
 export default function Home() {
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState<SearchResult[]>([])
-  const [loading, setLoading] = useState(false)
-  const [searched, setSearched] = useState(false)
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
 
   const handleSearch = async () => {
-    if (!query.trim()) return
+    if (!query.trim()) return;
 
-    setLoading(true)
-    setSearched(true)
-    
+    setLoading(true);
+    setSearched(true);
+
     try {
-      const response = await fetch('/api/search', {
-        method: 'POST',
+      const response = await fetch("/api/search", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ query }),
-      })
+      });
 
       if (response.ok) {
-        const data = await response.json()
-        setResults(data.results || [])
+        const data = await response.json();
+        setResults(data.results || []);
       }
     } catch (error) {
-      console.error('Search failed:', error)
+      console.error("Search failed:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch()
+    if (e.key === "Enter") {
+      handleSearch();
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-background cyber-grid relative overflow-hidden">
       {/* Data stream effects */}
       <div className="data-stream"></div>
-      
+
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-10 left-10 w-32 h-32 bg-primary rounded-full blur-3xl animate-pulse"></div>
@@ -93,15 +93,24 @@ export default function Home() {
             [NEURAL INTERFACE ACTIVATED]
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
-            <Badge variant="outline" className="cyber-border text-primary animate-pulse">
+            <Badge
+              variant="outline"
+              className="cyber-border text-primary animate-pulse"
+            >
               <Zap className="w-3 h-3 mr-1" />
               ONLINE
             </Badge>
-            <Badge variant="outline" className="cyber-border text-accent animate-pulse delay-1000">
+            <Badge
+              variant="outline"
+              className="cyber-border text-accent animate-pulse delay-1000"
+            >
               <Database className="w-3 h-3 mr-1" />
               CONNECTED
             </Badge>
-            <Badge variant="outline" className="cyber-border text-secondary animate-pulse delay-2000">
+            <Badge
+              variant="outline"
+              className="cyber-border text-secondary animate-pulse delay-2000"
+            >
               <Globe className="w-3 h-3 mr-1" />
               GLOBAL
             </Badge>
@@ -138,14 +147,13 @@ export default function Home() {
                 )}
               </Button>
             </div>
-            
+
             {searched && (
               <div className="mt-4 text-center">
                 <p className="text-muted-foreground font-mono text-sm">
-                  {results.length > 0 
-                    ? `FOUND ${results.length} RESULTS` 
-                    : 'NO RESULTS FOUND'
-                  }
+                  {results.length > 0
+                    ? `FOUND ${results.length} RESULTS`
+                    : "NO RESULTS FOUND"}
                 </p>
               </div>
             )}
@@ -159,10 +167,10 @@ export default function Home() {
             <h3 className="text-2xl font-bold text-primary neon-text font-mono mb-6">
               SEARCH RESULTS
             </h3>
-            
+
             {results.map((result, index) => (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 className="cyber-border bg-card/30 backdrop-blur-sm p-6 hover:bg-card/50 transition-all duration-300 scanline group"
               >
                 <div className="space-y-3">
@@ -178,11 +186,14 @@ export default function Home() {
                         {result.snippet}
                       </p>
                     </div>
-                    <Badge variant="outline" className="ml-4 cyber-border text-secondary">
+                    <Badge
+                      variant="outline"
+                      className="ml-4 cyber-border text-secondary"
+                    >
                       #{result.rank}
                     </Badge>
                   </div>
-                  
+
                   <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
                     <span>{result.host_name}</span>
                     <span>{result.date}</span>
@@ -194,5 +205,5 @@ export default function Home() {
         )}
       </div>
     </div>
-  )
+  );
 }

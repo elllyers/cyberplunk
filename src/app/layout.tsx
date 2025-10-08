@@ -15,12 +15,22 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "CYBER SEARCH - Neural Interface Search Engine",
-  description: "Advanced cyberpunk-themed search engine powered by AI neural networks. Experience the future of web search with neon aesthetics and cutting-edge technology.",
-  keywords: ["cyberpunk", "search engine", "AI", "neural interface", "futuristic", "neon", "cyber search"],
+  description:
+    "Advanced cyberpunk-themed search engine powered by AI neural networks. Experience the future of web search with neon aesthetics and cutting-edge technology.",
+  keywords: [
+    "cyberpunk",
+    "search engine",
+    "AI",
+    "neural interface",
+    "futuristic",
+    "neon",
+    "cyber search",
+  ],
   authors: [{ name: "Cyber Search Team" }],
   openGraph: {
     title: "CYBER SEARCH - Neural Interface",
-    description: "Experience the future of web search with cyberpunk aesthetics",
+    description:
+      "Experience the future of web search with cyberpunk aesthetics",
     url: "https://chat.z.ai",
     siteName: "CYBER SEARCH",
     type: "website",

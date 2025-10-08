@@ -1,41 +1,41 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Message = {
   text: string;
   senderId: string;
   timestamp: string;
-}
+};
 
 export default function SocketDemo() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const [socket, setSocket] = useState<any>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     const socketInstance = io({
-      path: '/api/socketio',
+      path: "/api/socketio",
     });
 
     setSocket(socketInstance);
 
-    socketInstance.on('connect', () => {
+    socketInstance.on("connect", () => {
       setIsConnected(true);
     });
 
-    socketInstance.on('disconnect', () => {
+    socketInstance.on("disconnect", () => {
       setIsConnected(false);
     });
 
-    socketInstance.on('message', (msg: Message) => {
-      setMessages(prev => [...prev, msg]);
+    socketInstance.on("message", (msg: Message) => {
+      setMessages((prev) => [...prev, msg]);
     });
 
     return () => {
@@ -45,22 +45,25 @@ export default function SocketDemo() {
 
   const sendMessage = () => {
     if (socket && inputMessage.trim()) {
-      setMessages(prev => [...prev, {
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: inputMessage.trim(),
+          senderId: socket.id || "user",
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+      socket.emit("message", {
         text: inputMessage.trim(),
-        senderId: socket.id || 'user',
-        timestamp: new Date().toISOString()
-      }]);
-      socket.emit('message', {
-        text: inputMessage.trim(),
-        senderId: socket.id || 'user',
-        timestamp: new Date().toISOString()
+        senderId: socket.id || "user",
+        timestamp: new Date().toISOString(),
       });
-      setInputMessage('');
+      setInputMessage("");
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       sendMessage();
     }
   };
@@ -71,8 +74,10 @@ export default function SocketDemo() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             WebSocket Demo
-            <span className={`text-sm px-2 py-1 rounded ${isConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-              {isConnected ? 'Connected' : 'Disconnected'}
+            <span
+              className={`text-sm px-2 py-1 rounded ${isConnected ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+            >
+              {isConnected ? "Connected" : "Disconnected"}
             </span>
           </CardTitle>
         </CardHeader>
@@ -110,8 +115,8 @@ export default function SocketDemo() {
               disabled={!isConnected}
               className="flex-1"
             />
-            <Button 
-              onClick={sendMessage} 
+            <Button
+              onClick={sendMessage}
               disabled={!isConnected || !inputMessage.trim()}
             >
               Send
